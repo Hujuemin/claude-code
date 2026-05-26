@@ -1,0 +1,20 @@
+name: Sync Upstream
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天国际标准时间 0:00（北京时间上午 8:00）自动执行
+  workflow_dispatch: # 允许你在页面上点击按钮手动触发同步
+
+jobs:
+  sync_latest_from_upstream:
+    name: Sync latest commits from upstream repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync fork
+        # 注意：如果你的默认分支是 master，请把下面的 main 改为 master
+        run: gh repo sync ${{ github.repository }} --branch main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
